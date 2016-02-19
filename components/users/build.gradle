@@ -1,0 +1,10 @@
+apply from: "${getRootDir()}/java.gradle"
+
+dependencies {
+    compile "org.springframework:spring-web:${springVersion}"
+    compile "org.springframework.security:spring-security-core:4.0.3.RELEASE"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.springframework:spring-jdbc:${springVersion}"
+
+    testCompile project(":components/db-testing-library")
+}

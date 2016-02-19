@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/spring-ng2-example
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+logging.level.com.github.joerodriguez.sbng2ex: DEBUG
