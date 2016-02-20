@@ -34,6 +34,7 @@ dependencies {
     compile "io.springfox:springfox-swagger2:2.0.0"
     compile "io.springfox:springfox-swagger-ui:2.0.0"
     compile project(":components/users")
+    compile project(path: ":applications/front-end", configuration: "compile")
 
     testCompile "org.springframework:spring-test:${springVersion}"
     testCompile "org.mock-server:mockserver-netty:3.9.1"
@@ -47,3 +48,10 @@ task migrateTestDatabase(type: FlywayMigrateTask) {
     extension.user = 'admin'
     extension.password = 'admin'
 }
+
+task copyFrontEnd(type: Copy) {
+    from project(':applications/front-end').buildDir
+    into "build/resources/main/public/"
+}
+
+processResources.dependsOn('copyFrontEnd')

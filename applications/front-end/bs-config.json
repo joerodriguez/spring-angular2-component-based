@@ -1,0 +1,8 @@
+
+{
+    "injectChanges": false,
+    "files": ["./build/**/*"],
+    "proxy": "localhost:8080",
+    "serveStatic": ["build"],
+    "logLevel": "debug"
+}

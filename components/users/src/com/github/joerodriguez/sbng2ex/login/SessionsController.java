@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("sessions")
+@RequestMapping("/api/sessions")
 public class SessionsController {
 
     @Autowired
@@ -36,10 +36,7 @@ public class SessionsController {
             SecurityContextHolder.getContext().setAuthentication(auth);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 

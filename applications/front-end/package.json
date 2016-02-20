@@ -1,0 +1,46 @@
+{
+  "name": "front-end",
+  "version": "1.0.0",
+
+  "scripts": {
+    "start": "./node_modules/.bin/concurrent \"npm run build\" \"npm run tsc:w\" \"npm run css:w\" \"npm run lite\" ",
+    "build": "[ -d build/ ] || mkdir build && npm run lib && tsc && npm run html && npm run css && npm run images",
+
+    "lib": "[ -d build/lib ] || mkdir build/lib && node copy-libs.js",
+    "html": "cp src/index.html build/",
+    "images": "[ -d build/images ] || mkdir build/images && cp -r src/images/. build/images",
+
+    "css": "./node_modules/.bin/node-sass      -r --output build/styles/ --source-map=true src/styles/",
+    "css:w": "./node_modules/.bin/node-sass -w -r --output build/styles/ --source-map=true src/styles/",
+
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+
+    "postinstall": "npm run typings install",
+    "lite": "node local-server.js",
+    "typings" : "typings"
+  },
+
+  "license": "ISC",
+
+  "dependencies": {
+    "angular2": "2.0.0-beta.6",
+    "systemjs": "0.19.20",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.14"
+  },
+
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "browser-sync": "2.11.1",
+    "http-proxy-middleware": "0.10.0",
+    "typescript": "^1.7.5",
+    "typings":"^0.6.8",
+    "http-proxy-middleware": "^0.10.0",
+    "fs-extra": "0.26.5",
+    "node-sass": "^3.4.2"
+  }
+}

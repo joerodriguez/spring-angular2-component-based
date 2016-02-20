@@ -37,10 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/sessions/**").permitAll()
-                .antMatchers("/pub/**").permitAll()
-                .antMatchers("/v2/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/springfox-swagger-ui/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/sessions/**").permitAll()
+                .antMatchers("/api/**").fullyAuthenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin().disable()
                 .csrf().disable();

@@ -13,7 +13,7 @@ public class InvitationController {
 
     @Autowired InvitationService invitationService;
 
-    @RequestMapping(value = "/user-invitations", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/api//user-invitations", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity createInvitation(
             @RequestBody InvitationRequest invitationRequest
     ) {
