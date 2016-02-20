@@ -1,4 +1,4 @@
-package com.github.joerodriguez.sbng2ex.invitation;
+package com.github.joerodriguez.sbng2ex;
 
 public class ServiceResponse<T> {
     public static ServiceResponse success() {

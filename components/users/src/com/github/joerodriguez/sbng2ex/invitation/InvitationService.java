@@ -1,5 +1,6 @@
 package com.github.joerodriguez.sbng2ex.invitation;
 
+import com.github.joerodriguez.sbng2ex.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,25 +12,25 @@ import java.util.Map;
 @Component
 public class InvitationService {
 
-    @Autowired
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final PasswordEncoder passwordEncoder;
+    private final PasswordGenerator passwordGenerator;
+    private final EmailService emailService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    public InvitationService(NamedParameterJdbcTemplate namedParameterJdbcTemplate, PasswordEncoder passwordEncoder, PasswordGenerator passwordGenerator, EmailService emailService) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
+        this.passwordGenerator = passwordGenerator;
+        this.emailService = emailService;
+    }
 
-    @Autowired
-    PasswordGenerator passwordGenerator;
-
-    @Autowired
-    EmailService emailService;
-
-    public ServiceResponse<Invitation> invite(InvitationRequest invitationRequest) {
+    public ServiceResponse<Void> invite(InvitationRequest invitationRequest) {
         String password = passwordGenerator.get();
 
         Map<String, String> params = new HashMap<>();
         params.put("email", invitationRequest.getEmail());
         params.put("password", passwordEncoder.encode(password));
-
 
         namedParameterJdbcTemplate.update(
                 "INSERT INTO users (email, password) VALUES (:email, :password)",

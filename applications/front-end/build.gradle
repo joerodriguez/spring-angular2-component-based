@@ -26,7 +26,6 @@ configurations {
     compile
 }
 
-
 task zipBuild(type: Zip, dependsOn: ["build"]) {
     from "build"
 }
