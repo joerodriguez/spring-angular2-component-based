@@ -54,7 +54,7 @@ var specFiles =
     Object.keys(window.__karma__.files)
         .filter(function (path) { return /\.test\.js$/.test(path); })
         // .filter(function (path) { console.log(path); return true; })
-        .map(function (moduleName) { return System.import(moduleName); })
+        .map(function (moduleName) { return System.import(moduleName); });
 
 System
     .import('angular2/platform/browser').then(function (b) { b.BrowserDomAdapter.makeCurrent(); })

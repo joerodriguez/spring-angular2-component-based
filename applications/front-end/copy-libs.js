@@ -7,7 +7,8 @@ var files = {
     "systemjs": "node_modules/systemjs/dist/system.src.js",
     "rxjs": "node_modules/rxjs/bundles/Rx.js",
     "angular2": "node_modules/angular2/bundles/angular2.dev.js",
-    "angular2-http": "node_modules/angular2/bundles/http.min.js"
+    "angular2-http": "node_modules/angular2/bundles/http.dev.js",
+    "angular2-router": "node_modules/angular2/bundles/router.dev.js"
 };
 
 try {

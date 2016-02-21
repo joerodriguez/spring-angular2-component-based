@@ -4,15 +4,15 @@
 
   "scripts": {
 
-    "test": "./node_modules/.bin/concurrent \"npm run build\" \"./node_modules/.bin/karma start --single-run\"",
-    "test:w": "./node_modules/.bin/concurrent \"npm run build\" \"npm run tsc:w\" \"./node_modules/.bin/karma start karma.conf.js --no-single-run\"",
+    "test": "npm run build && ./node_modules/.bin/concurrent \"./node_modules/.bin/karma start --single-run\"",
+    "test:w": "npm run build && ./node_modules/.bin/concurrent \"npm run tsc:w\" \"./node_modules/.bin/karma start karma.conf.js --no-single-run\"",
 
-    "start": "./node_modules/.bin/concurrent \"npm run build\" \"npm run tsc:w\" \"npm run css:w\" \"npm run lite\" ",
-    "build": "[ -d build/ ] || mkdir build && npm run lib && tsc && npm run html && npm run css && npm run images",
+    "start": "npm run build && ./node_modules/.bin/concurrent \"npm run tsc:w\" \"npm run css:w\" \"npm run serve\"",
+    "build": "mkdir -p build && ./node_modules/.bin/concurrent \"npm run lib\" \"tsc\" \"npm run html\" \"npm run css\" \"npm run images\"",
 
-    "lib": "[ -d build/lib ] || mkdir build/lib && node copy-libs.js",
+    "lib": "mkdir -p build/lib && node copy-libs.js",
     "html": "cp src/index.html build/",
-    "images": "[ -d build/images ] || mkdir build/images && cp -r src/images/. build/images",
+    "images": "mkdir -p build/images && cp -r src/images/. build/images",
 
     "css": "./node_modules/.bin/node-sass      -r --output build/styles/ --source-map=true src/styles/",
     "css:w": "./node_modules/.bin/node-sass -w -r --output build/styles/ --source-map=true src/styles/",
@@ -21,7 +21,7 @@
     "tsc:w": "tsc -w",
 
     "postinstall": "npm run typings install",
-    "lite": "node local-server.js",
+    "serve": "node local-server.js",
     "typings" : "typings"
   },
 

@@ -1,28 +1,48 @@
 import {Component} from 'angular2/core';
-import {SessionService} from "./session.service";
+import {Router, RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
+
+import {LoginComponent} from "./sessions/login.component";
+import {UsersDashboardComponent} from "./users/users.dashboard.component";
+import {SessionService} from "./sessions/session.service";
 
 @Component({
     selector: 'app',
 
     template: `
-        <h1>Login</h1>
+        <nav [hidden]="!loggedIn">
+          <a [routerLink]="['Users']">Users</a>
+          <a (click)="logout()">Logout</a>
+        </nav>
 
-        <input #email id="email">
-        <input #password type="password" id="password">
-        <input type="submit" (click)="login(email.value, password.value)">
-
-        {{message}}
-    `
+        <router-outlet></router-outlet>
+    `,
+    directives: [ROUTER_DIRECTIVES]
 })
+
+@RouteConfig([
+    {path: '/login', name: 'Login', component: LoginComponent, useAsDefault: true},
+    {path: '/users', name: 'Users', component: UsersDashboardComponent}
+])
+
 export class AppComponent {
-    message: string = "";
+    loggedIn: boolean = false;
 
-    constructor(private _sessionService:SessionService) {}
 
-    login(email: string, password: string) {
-        this._sessionService.create(email, password).subscribe(
-            success => this.message = "Login succeeded",
-            error => this.message = "Login failed"
-        );
+    constructor(
+        private _router: Router,
+        private _sessionService: SessionService
+    ) {
+        _sessionService.loggedInStatusStream().subscribe(
+            (loggedInStatus) => { this.loggedIn = loggedInStatus; }
+        )
     }
+
+    logout() {
+        this._sessionService.destroy().subscribe(
+            () => {
+                this._router.navigate(['Login']);
+            }
+        )
+    }
+
 }

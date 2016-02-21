@@ -2,7 +2,7 @@ import {injectAsync, it, describe, beforeEach, beforeEachProviders, inject} from
 import {MockBackend,MockConnection} from "angular2/src/http/backends/mock_backend";
 import {Http, XHRBackend, HTTP_PROVIDERS, ResponseOptions, Response} from "angular2/http";
 import {provide} from "angular2/core";
-import {SessionService} from "../app/session.service";
+import {SessionService} from "../app/sessions/session.service";
 import {RequestMethod} from "angular2/http";
 
 
