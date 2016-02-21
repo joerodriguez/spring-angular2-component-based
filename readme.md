@@ -17,6 +17,7 @@ An example project using Spring (component-based) and Angular 2.
 
 ## Running
 
+1. Create a test user `EMAIL=john.doe@example.com PASSWORD=test123 ./gradlew :applications/example-api:runAppTask -PtaskName=createUser`
 1. `gradle bootRun`
 1. Navigate to `http://localhost:8080/` 
 1. Check out `http://localhost:8080/swagger-ui.html` to see all functionality of the backend.

@@ -1,44 +1,32 @@
 package com.github.joerodriguez.sbng2ex.invitation;
 
 import com.github.joerodriguez.sbng2ex.ServiceResponse;
+import com.github.joerodriguez.sbng2ex.User;
+import com.github.joerodriguez.sbng2ex.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class InvitationService {
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final PasswordEncoder passwordEncoder;
     private final PasswordGenerator passwordGenerator;
     private final EmailService emailService;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public InvitationService(NamedParameterJdbcTemplate namedParameterJdbcTemplate, PasswordEncoder passwordEncoder, PasswordGenerator passwordGenerator, EmailService emailService) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.passwordEncoder = passwordEncoder;
+    public InvitationService(PasswordGenerator passwordGenerator, EmailService emailService, UsersRepository usersRepository) {
         this.passwordGenerator = passwordGenerator;
         this.emailService = emailService;
+        this.usersRepository = usersRepository;
     }
 
-    public ServiceResponse<Void> invite(InvitationRequest invitationRequest) {
+    public ServiceResponse<User> invite(InvitationRequest invitationRequest) {
         String password = passwordGenerator.get();
 
-        Map<String, String> params = new HashMap<>();
-        params.put("email", invitationRequest.getEmail());
-        params.put("password", passwordEncoder.encode(password));
-
-        namedParameterJdbcTemplate.update(
-                "INSERT INTO users (email, password) VALUES (:email, :password)",
-                params
-        );
+        User user = usersRepository.create(invitationRequest.getEmail(), password);
 
         emailService.sendInvitation(invitationRequest.getEmail(), password);
 
-        return ServiceResponse.success();
+        return ServiceResponse.success(user);
     }
 }

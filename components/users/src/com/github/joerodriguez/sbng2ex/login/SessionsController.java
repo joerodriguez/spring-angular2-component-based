@@ -43,7 +43,7 @@ public class SessionsController {
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete() {
         SecurityContextHolder.getContext().setAuthentication(null);
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

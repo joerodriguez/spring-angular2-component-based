@@ -1,4 +1,4 @@
-package github.joerodriguez.sbng2ex.invitation;
+package github.joerodriguez.sbng2ex;
 
 import com.github.joerodriguez.sbng2ex.ServiceResponse;
 import com.github.joerodriguez.sbng2ex.TestDataSource;
@@ -21,40 +21,44 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
-public class InvitationServiceTest {
+public class UsersRepositoryTest {
 
     @Mock
-    EmailService emailService;
+    PasswordEncoder passwordEncoder;
 
-    @Mock
+    JdbcTemplate jdbcTemplate;
+
     UsersRepository usersRepository;
-
-    @Mock
-    PasswordGenerator passwordGenerator;
-
-    InvitationService invitationService;
 
     @Before
     public void setUp() throws Exception {
+        TestDataSource testDataSource = new TestDataSource("spring-ng-example-test");
+        jdbcTemplate = testDataSource.getJdbcTemplate();
+
         MockitoAnnotations.initMocks(this);
 
-        invitationService = new InvitationService(
-                passwordGenerator,
-                emailService,
-                usersRepository
+        usersRepository = new UsersRepository(
+                testDataSource.getJdbcTemplate(),
+                passwordEncoder
         );
     }
 
     @Test
     public void testUserIsCreatedAndNotified() {
-        doReturn("funkyFresh").when(passwordGenerator).get();
-        doReturn(new User(1, "testuser@example.com")).when(usersRepository).create("testuser@example.com", "funkyFresh");
+        doReturn("funkyFresh-encoded").when(passwordEncoder).encode("funkyFresh");
 
 
-        ServiceResponse<User> response = invitationService.invite(new InvitationRequest("testuser@example.com"));
+        User user = usersRepository.create("testuser@example.com", "funkyFresh");
 
 
-        assertThat(response.isSuccess(), equalTo(true));
-        verify(emailService).sendInvitation(eq("testuser@example.com"), eq("funkyFresh"));
+        Long id = jdbcTemplate.queryForObject(
+                "SELECT id FROM users WHERE email = ? AND password = ?",
+                new Object[]{"testuser@example.com", "funkyFresh-encoded"},
+                Long.class
+        );
+
+        assertThat(user.getEmail(), equalTo("testuser@example.com"));
+
+        assertThat(id, equalTo(user.getId()));
     }
 }

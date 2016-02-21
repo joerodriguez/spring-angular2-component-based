@@ -37,12 +37,25 @@ dependencies {
     testCompile project(":components/db-testing-library")
 }
 
+springBoot {
+    mainClass = "com.github.joerodriguez.sbng2ex.ExampleApiApplication"
+}
+
 task migrateTestDatabase(type: FlywayMigrateTask) {
     extension = new FlywayExtension()
     extension.driver = 'org.postgresql.Driver'
     extension.url = 'jdbc:postgresql://localhost/spring-ng2-example-test'
     extension.user = 'admin'
     extension.password = 'admin'
+}
+
+task runAppTask(dependsOn: 'classes', type: JavaExec) {
+    main = 'com.github.joerodriguez.tasks.TaskRunner'
+    classpath = sourceSets.main.runtimeClasspath
+
+    if (project.hasProperty('taskName')) {
+        args(taskName)
+    }
 }
 
 task copyFrontEnd(type: Copy) {
