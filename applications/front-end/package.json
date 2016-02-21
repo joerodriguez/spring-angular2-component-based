@@ -3,6 +3,10 @@
   "version": "1.0.0",
 
   "scripts": {
+
+    "test": "./node_modules/.bin/concurrent \"npm run build\" \"./node_modules/.bin/karma start --single-run\"",
+    "test:w": "./node_modules/.bin/concurrent \"npm run build\" \"npm run tsc:w\" \"./node_modules/.bin/karma start karma.conf.js --no-single-run\"",
+
     "start": "./node_modules/.bin/concurrent \"npm run build\" \"npm run tsc:w\" \"npm run css:w\" \"npm run lite\" ",
     "build": "[ -d build/ ] || mkdir build && npm run lib && tsc && npm run html && npm run css && npm run images",
 
@@ -39,8 +43,12 @@
     "http-proxy-middleware": "0.10.0",
     "typescript": "^1.7.5",
     "typings":"^0.6.8",
-    "http-proxy-middleware": "^0.10.0",
     "fs-extra": "0.26.5",
-    "node-sass": "^3.4.2"
+    "node-sass": "^3.4.2",
+
+    "jasmine-core": "2.4.1",
+    "karma": "0.13.19",
+    "karma-chrome-launcher": "0.2.2",
+    "karma-jasmine": "0.3.6"
   }
 }

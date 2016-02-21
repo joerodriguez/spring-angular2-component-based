@@ -15,8 +15,6 @@ try {
         var val = files[key];
         fs.copySync(val, 'build/lib/' + key + '.js')
     });
-
-    console.log("success!")
 } catch (err) {
     console.error(err)
 }
