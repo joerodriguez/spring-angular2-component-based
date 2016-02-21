@@ -1,10 +1,6 @@
 import org.flywaydb.gradle.FlywayExtension
 import org.flywaydb.gradle.task.FlywayMigrateTask
 
-repositories {
-    jcenter()
-}
-
 buildscript {
     repositories {
         mavenCentral()

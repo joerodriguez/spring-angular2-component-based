@@ -7,8 +7,8 @@ import {SessionService} from "./session.service";
     template: `
         <h1>Login</h1>
 
-        <input #email>
-        <input #password type="password">
+        <input #email id="email">
+        <input #password type="password" id="password">
         <input type="submit" (click)="login(email.value, password.value)">
 
         {{message}}

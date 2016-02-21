@@ -1,0 +1,9 @@
+apply from: "${getRootDir()}/java.gradle"
+
+dependencies {
+    testCompile "org.springframework.boot:spring-boot-starter-test:1.3.2.RELEASE"
+    testCompile "org.fluentlenium:fluentlenium-core:0.10.9"
+
+    testCompile project(":applications/example-api")
+    testCompile project(":components/db-testing-library")
+}

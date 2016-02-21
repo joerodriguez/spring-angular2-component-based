@@ -29,6 +29,7 @@ configurations {
 task zipBuild(type: Zip, dependsOn: ["build"]) {
     from "build"
     archiveName 'distribution.zip'
+    destinationDir projectDir
 }
 
 artifacts {
