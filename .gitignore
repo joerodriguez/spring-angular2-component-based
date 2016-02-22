@@ -3,3 +3,5 @@ build
 .gradle
 .idea
 node_modules
+feature-tests/mockserver.log
+feature-tests/mockserver_request.log

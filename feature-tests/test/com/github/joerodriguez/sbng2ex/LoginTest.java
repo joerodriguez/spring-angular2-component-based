@@ -10,6 +10,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ExampleApiApplication.class)
 @WebIntegrationTest("server.port:0")
+@ActiveProfiles("test")
 public class LoginTest extends FluentTest {
 
     @Value("${local.server.port}")
