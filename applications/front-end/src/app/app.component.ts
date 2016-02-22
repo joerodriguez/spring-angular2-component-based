@@ -32,8 +32,8 @@ export class AppComponent {
         private _router: Router,
         private _sessionService: SessionService
     ) {
-        _sessionService.loggedInStatusStream().subscribe(
-            (loggedInStatus) => { this.loggedIn = loggedInStatus; }
+        _sessionService.loginStatus.subscribe(
+            loggedInStatus => { this.loggedIn = loggedInStatus; }
         )
     }
 
