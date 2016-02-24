@@ -9,12 +9,11 @@ An example project using Spring (component-based) and Angular 2.
 
 ## Setup
 
+1. Install Firefox: https://www.mozilla.org/en-US/firefox/new/
 1. Install postgres: `brew install postgres`
 1. Follow instructions to start postgres now and on restart
-1. Create a postgres database super user admin with password 'admin': `createuser admin --superuser --password`
+1. Create a postgres database super user 'admin' with password 'admin': `createuser admin --superuser --password`
 1. Create postgres databases: `createdb spring-ng2-example && createdb spring-ng-example-test`
-1. `cp applications/example-api/src/resources/application.yml.example deployment/example-api/src/resources/application.yml`
-
 ## Running
 
 1. Create a test user `EMAIL=john.doe@example.com PASSWORD=test123 ./gradlew :applications/example-api:runAppTask -PtaskName=createUser`
