@@ -36,9 +36,6 @@ public class UsersRepository {
     }
 
     private User find(long id) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-
         return jdbcTemplate.queryForObject(
                 "SELECT id, email FROM users WHERE id = ?",
                 new Object[]{ id },
