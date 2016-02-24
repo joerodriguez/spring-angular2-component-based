@@ -22,6 +22,7 @@ node {
     nodeModulesDir = file("${project.projectDir}")
 }
 
+
 configurations {
     compile
 }
@@ -59,3 +60,4 @@ task testWatch(type: NpmTask) {
 }
 
 build.dependsOn npmInstall
+test.dependsOn npmInstall
