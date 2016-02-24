@@ -57,3 +57,5 @@ task test(type: NpmTask) {
 task testWatch(type: NpmTask) {
     args = ['run', 'test:w']
 }
+
+build.dependsOn npmInstall
