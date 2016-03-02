@@ -25,7 +25,7 @@ public class UsersRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        TestDataSource testDataSource = new TestDataSource("spring-ng-example-test");
+        TestDataSource testDataSource = new TestDataSource("spring-ng2-example-test");
         jdbcTemplate = testDataSource.getJdbcTemplate();
 
         MockitoAnnotations.initMocks(this);

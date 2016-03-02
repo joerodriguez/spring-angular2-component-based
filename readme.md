@@ -12,11 +12,16 @@ An example project using Spring (component-based) and Angular 2.
 1. Install Firefox: https://www.mozilla.org/en-US/firefox/new/
 1. Install postgres: `brew install postgres`
 1. Follow instructions to start postgres now and on restart
-1. Create a postgres database super user 'admin' with password 'admin': `createuser admin --superuser --password`
-1. Create postgres databases: `createdb spring-ng2-example && createdb spring-ng-example-test`
+1. Create a postgres database super user admin with password 'admin': `createuser admin --superuser --password`
+1. Create postgres databases: `createdb spring-ng2-example && createdb spring-ng2-example-test`
+1. `mkdir -p deployment/example-api/src/resources`
+1. `cp applications/example-api/src/resources/application.yml.example deployment/example-api/src/resources/application.yml`
+
+
 ## Running
 
 1. Create a test user `EMAIL=john.doe@example.com PASSWORD=test123 ./gradlew :applications/example-api:runAppTask -PtaskName=createUser`
+1. Run migrations with the following command: `./gradlew flywayMigrate -Dflyway.user=admin -Dflyway.password=admin -Dflyway.url=jdbc:postgresql://localhost/spring-ng2-example`
 1. `gradle bootRun`
 1. Navigate to `http://localhost:8080/` 
 1. Check out `http://localhost:8080/swagger-ui.html` to see all functionality of the backend.
