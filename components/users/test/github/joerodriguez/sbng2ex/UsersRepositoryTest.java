@@ -1,13 +1,8 @@
 package github.joerodriguez.sbng2ex;
 
-import com.github.joerodriguez.sbng2ex.ServiceResponse;
 import com.github.joerodriguez.sbng2ex.TestDataSource;
 import com.github.joerodriguez.sbng2ex.User;
 import com.github.joerodriguez.sbng2ex.UsersRepository;
-import com.github.joerodriguez.sbng2ex.invitation.EmailService;
-import com.github.joerodriguez.sbng2ex.invitation.InvitationRequest;
-import com.github.joerodriguez.sbng2ex.invitation.InvitationService;
-import com.github.joerodriguez.sbng2ex.invitation.PasswordGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 public class UsersRepositoryTest {
 

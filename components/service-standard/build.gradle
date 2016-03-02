@@ -1,0 +1,6 @@
+apply from: "${getRootDir()}/java.gradle"
+
+dependencies {
+    compile "org.springframework:spring-web:${springVersion}"
+    compile "org.springframework:spring-jdbc:${springVersion}"
+}
