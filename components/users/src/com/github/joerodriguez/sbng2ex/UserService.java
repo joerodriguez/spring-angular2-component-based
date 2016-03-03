@@ -30,7 +30,7 @@ public class UserService {
                 response.addError(ErrorType.EMAIL_TAKEN.forField("email"));
             }
 
-            response.commit(() -> usersRepository.create(email, password));
+            response.apply(() -> usersRepository.create(email, password));
         });
     }
 }

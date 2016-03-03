@@ -3,6 +3,7 @@ package com.github.joerodriguez.sbng2ex.transaction;
 import com.github.joerodriguez.sbng2ex.service.ErrorType;
 import com.github.joerodriguez.sbng2ex.service.ServiceError;
 import com.github.joerodriguez.sbng2ex.service.ServiceResponse;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionOperations;
@@ -11,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @Component
 public class Transactions {
 
     protected final TransactionOperations transactionOperations;
+    private final Logger logger = getLogger(this.getClass());
 
     @Autowired
     public Transactions(TransactionOperations transactionOperations) {
@@ -31,10 +35,10 @@ public class Transactions {
                 transactionConsumer.accept(transaction);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                e.printStackTrace();
+                logger.error("Exception occurred during transaction.", e);
 
-                ServiceError unknown = ServiceError.create(ErrorType.UNKNOWN, "unknown", e.getMessage());
-                response.addError(unknown);
+                ServiceError systemUnexpectedError = ServiceError.create(ErrorType.SYSTEM_UNEXPECTED, "unknown", e.getMessage());
+                response.addError(systemUnexpectedError);
             }
 
             transaction.responses.forEach((r) ->

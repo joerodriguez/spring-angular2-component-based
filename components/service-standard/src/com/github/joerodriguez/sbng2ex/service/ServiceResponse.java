@@ -38,7 +38,7 @@ public class ServiceResponse<T> {
         this.errors.add(error);
     }
 
-    public void commit(Supplier<T> supplier) {
+    public void apply(Supplier<T> supplier) {
         if (this.errors.isEmpty()) {
             this.entity = supplier.get();
         }
@@ -46,7 +46,7 @@ public class ServiceResponse<T> {
 
     public static <T> ServiceResponse success(T entity) {
         return ServiceResponse.create((r) -> {
-            r.commit(() -> entity);
+            r.apply(() -> entity);
         });
     }
 
