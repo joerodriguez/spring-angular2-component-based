@@ -9,12 +9,15 @@ import com.github.joerodriguez.sbng2ex.invitation.PasswordGenerator
 import com.github.joerodriguez.sbng2ex.service.ErrorType
 import com.github.joerodriguez.sbng2ex.service.ServiceError
 import com.github.joerodriguez.sbng2ex.service.ServiceResponse
+import com.github.joerodriguez.sbng2ex.testhelper.stub
+import com.github.joerodriguez.sbng2ex.testhelper.with
+import com.github.joerodriguez.sbng2ex.testhelper.withException
 import com.github.joerodriguez.sbng2ex.transaction.TransactionsFake
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.powermock.api.mockito.PowerMockito.*
+import org.powermock.api.mockito.PowerMockito.mock
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.PowerMockRunner
 
@@ -36,12 +39,17 @@ class InvitationServiceTest {
 
     @Test
     fun testUserIsCreatedAndNotified() {
-        doReturn("funkyFresh").`when`(passwordGenerator).get()
-        doReturn(ServiceResponse.success(User(1, "testuser@example.com"))).`when`(userService).create("testuser@example.com", "funkyFresh")
-        doReturn(ServiceResponse.success<Void?>(null)).`when`(emailService).sendInvitation("testuser@example.com", "funkyFresh")
+        stub(passwordGenerator.get()).with("funkyFresh")
+
+        stub(userService.create("testuser@example.com", "funkyFresh"))
+                .with(ServiceResponse.success(User(1, "testuser@example.com")))
+
+        stub(emailService.sendInvitation("testuser@example.com", "funkyFresh"))
+                .with(ServiceResponse.success<Any?>(null))
 
 
         val response = invitationService.invite(InvitationRequest("testuser@example.com"))
+
 
         assertThat(transactions.success()).isTrue()
         assertThat(response.isSuccess).isTrue()
@@ -50,13 +58,15 @@ class InvitationServiceTest {
 
     @Test
     fun testUserIsNotCreated_whenEmailIsTaken() {
-        doReturn("funkyFresh").`when`(passwordGenerator).get()
-        doReturn(ServiceResponse.success<Void?>(null)).`when`(emailService).sendInvitation("testuser@example.com", "funkyFresh")
+        stub(passwordGenerator.get()).with("funkyFresh")
 
-        `when`(userService.create("testuser@example.com", "funkyFresh"))
-                .thenReturn(
-                        ServiceResponse.create { it.addError(ServiceError.create(ErrorType.EMAIL_TAKEN, "email")) }
-                )
+        stub(emailService.sendInvitation("testuser@example.com", "funkyFresh"))
+                .with(ServiceResponse.success<Any?>(null))
+
+        stub(userService.create("testuser@example.com", "funkyFresh"))
+                .with(ServiceResponse.create {
+                    it.addError(ServiceError.create(ErrorType.EMAIL_TAKEN, "email"))
+                })
 
 
         val response = invitationService.invite(InvitationRequest("testuser@example.com"))
@@ -69,11 +79,10 @@ class InvitationServiceTest {
 
     @Test
     fun testUserIsNotCreated_whenUserServiceThrows() {
-        `when`(passwordGenerator.get())
-                .thenReturn("funkyFresh")
+        stub(passwordGenerator.get()).with("funkyFresh")
 
-        `when`(userService.create("testuser@example.com", "funkyFresh"))
-                .thenThrow(RuntimeException("duplicate key"))
+        stub(userService.create("testuser@example.com", "funkyFresh"))
+                .withException(RuntimeException("duplicate key"))
 
 
         val response = invitationService.invite(InvitationRequest("testuser@example.com"))
