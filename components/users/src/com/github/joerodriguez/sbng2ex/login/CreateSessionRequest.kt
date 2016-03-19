@@ -1,6 +1,8 @@
 package com.github.joerodriguez.sbng2ex.login
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class CreateSessionRequest(
-    val email: String,
-    val password: String
+        @JsonProperty("email") val email: String,
+        @JsonProperty("password") val password: String
 )

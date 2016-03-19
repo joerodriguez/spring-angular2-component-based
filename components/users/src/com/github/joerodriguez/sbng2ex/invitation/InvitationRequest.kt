@@ -1,3 +1,7 @@
 package com.github.joerodriguez.sbng2ex.invitation
 
-data class InvitationRequest(val email: String)
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class InvitationRequest(
+        @JsonProperty("email") val email: String
+)
