@@ -37,7 +37,7 @@ public class Transactions {
                 status.setRollbackOnly();
                 logger.error("Exception occurred during transaction.", e);
 
-                ServiceError systemUnexpectedError = ServiceError.create(ErrorType.SYSTEM_UNEXPECTED, "unknown", e.getMessage());
+                ServiceError systemUnexpectedError = ServiceError.Companion.create(ErrorType.SYSTEM_UNEXPECTED, "unknown", e.getMessage());
                 response.addError(systemUnexpectedError);
             }
 
