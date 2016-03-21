@@ -20,13 +20,11 @@ class InvitationService
 
 {
 
-    fun invite(invitationRequest: InvitationRequest): ServiceResponse<User> {
+    fun invite(invitationRequest: InvitationRequest) = transactions.create<User> {
         val password = passwordGenerator.get()
 
-        return transactions.create<User> {
-            it.addWithEntity(userService.create(invitationRequest.email, password))
-            it.add(emailService.sendInvitation(invitationRequest.email, password))
-        }
+        it.addWithEntity(userService.create(invitationRequest.email, password))
+        it.add(emailService.sendInvitation(invitationRequest.email, password))
     }
 
 }

@@ -17,19 +17,17 @@ class UserService
 
     private val emailPattern = Pattern.compile("^(.+)@(.+)$")
 
-    fun create(email: String, password: String): ServiceResponse<User> {
-        return ServiceResponse.create {
+    fun create(email: String, password: String) = ServiceResponse.create <User> {
 
-            if (!emailPattern.matcher(email).matches()) {
-                it.addError(ErrorType.INVALID_EMAIL.forField("email"))
-            }
-
-            if (usersRepository.findByEmail(email) != null) {
-                it.addError(ErrorType.EMAIL_TAKEN.forField("email"))
-            }
-
-            it.apply { usersRepository.create(email, password) }
+        if (!emailPattern.matcher(email).matches()) {
+            it.addError(ErrorType.INVALID_EMAIL.forField("email"))
         }
+
+        if (usersRepository.findByEmail(email) != null) {
+            it.addError(ErrorType.EMAIL_TAKEN.forField("email"))
+        }
+
+        it.apply { usersRepository.create(email, password) }
     }
 
 }
