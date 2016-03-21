@@ -1,7 +1,5 @@
 package com.github.joerodriguez.sbng2ex.service
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 class ServiceError private constructor(
         val code: String,
         val message: String,

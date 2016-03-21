@@ -1,8 +1,6 @@
 package com.github.joerodriguez.sbng2ex.service
 
 import java.util.ArrayList
-import java.util.function.Consumer
-import java.util.function.Supplier
 
 class ServiceResponse<T> {
     private val errors: MutableList<ServiceError>
