@@ -21,7 +21,7 @@ public class Handler {
     public static class Errors {
         private List<ServiceError> errors;
 
-        public Errors(List<ServiceError> errors) {
+        Errors(List<ServiceError> errors) {
             this.errors = errors;
         }
 

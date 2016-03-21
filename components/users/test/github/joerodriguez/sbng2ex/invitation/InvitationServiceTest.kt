@@ -64,7 +64,7 @@ class InvitationServiceTest {
                 .with(ServiceResponse.success<Any?>(null))
 
         stub(userService.create("testuser@example.com", "funkyFresh"))
-                .with(ServiceResponse.create {
+                .with(ServiceResponse.create<User> {
                     it.addError(ServiceError.create(ErrorType.EMAIL_TAKEN, "email"))
                 })
 
