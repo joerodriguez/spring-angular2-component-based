@@ -14,7 +14,6 @@ apply plugin: "kotlin"
 apply from: "${getRootDir()}/java.gradle"
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1"
     compile "org.springframework:spring-jdbc:${springVersion}"
     compile "org.postgresql:postgresql:9.4.1207"
 }

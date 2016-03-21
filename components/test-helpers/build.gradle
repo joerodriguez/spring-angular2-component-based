@@ -14,8 +14,6 @@ apply plugin: "kotlin"
 apply from: "${getRootDir()}/java.gradle"
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1"
-
     compile "junit:junit:4.12"
     compile 'org.assertj:assertj-core:3.3.0'
 
