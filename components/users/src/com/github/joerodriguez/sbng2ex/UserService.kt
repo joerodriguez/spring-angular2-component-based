@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 class UserService
 
     @Autowired
-    constructor(val usersRepository: UsersRepository)
+    constructor(private val usersRepository: UsersRepository)
 
 {
 

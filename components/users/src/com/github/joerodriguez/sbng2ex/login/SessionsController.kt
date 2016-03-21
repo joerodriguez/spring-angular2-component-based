@@ -1,5 +1,6 @@
 package com.github.joerodriguez.sbng2ex.login
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -44,3 +45,8 @@ class SessionsController {
     }
 
 }
+
+data class CreateSessionRequest(
+        @JsonProperty("email") val email: String,
+        @JsonProperty("password") val password: String
+)
