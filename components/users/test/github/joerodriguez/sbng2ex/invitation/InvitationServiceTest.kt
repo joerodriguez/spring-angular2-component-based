@@ -90,7 +90,6 @@ class InvitationServiceTest {
 
         assertThat(transactions.didRollback()).isTrue()
         assertThat(response.isSuccess).isFalse()
-        assertThat(response.getErrors()[0].extendedMessage).isEqualTo("duplicate key")
 
         Mockito.verify(emailService, Mockito.never()).sendInvitation("testuser@example.com", "funkyFresh")
     }
