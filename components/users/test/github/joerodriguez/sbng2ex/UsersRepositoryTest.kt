@@ -2,6 +2,8 @@ package github.joerodriguez.sbng2ex
 
 import com.github.joerodriguez.sbng2ex.TestDataSource
 import com.github.joerodriguez.sbng2ex.UsersRepository
+import com.github.joerodriguez.sbng2ex.testhelper.stub
+import com.github.joerodriguez.sbng2ex.testhelper.with
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito.`when`
@@ -23,7 +25,7 @@ class UsersRepositoryTest {
 
     @Test
     fun testUserIsCreatedAndNotified() {
-        `when`(passwordEncoder.encode("funkyFresh")).thenReturn("funkyFresh-encoded")
+        stub(passwordEncoder.encode("funkyFresh")).with("funkyFresh-encoded")
 
 
         val user = usersRepository.create("testuser@example.com", "funkyFresh")
