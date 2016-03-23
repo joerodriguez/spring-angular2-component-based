@@ -65,7 +65,7 @@ class InvitationServiceTest {
 
         stub(userService.create("testuser@example.com", "funkyFresh"))
                 .with(ServiceResponse.create<User> {
-                    it.addError(ServiceError.create(ErrorType.EMAIL_TAKEN, "email"))
+                    it.error(ServiceError.create(ErrorType.EMAIL_TAKEN, "email"))
                 })
 
 
@@ -75,6 +75,25 @@ class InvitationServiceTest {
         assertThat(transactions.didRollback()).isTrue()
         assertThat(response.isSuccess).isFalse()
         Mockito.verify(emailService).sendInvitation("testuser@example.com", "funkyFresh")
+    }
+
+    @Test()
+    fun testUserIsNotCreated_whenEmailIsAdmin() {
+        stub(passwordGenerator.get()).with("funkyFresh")
+
+        stub(emailService.sendInvitation("admin", "funkyFresh"))
+                .with(ServiceResponse.success<Any?>(null))
+
+        stub(userService.create("admin", "funkyFresh"))
+                .with(ServiceResponse.success(User(1, "testuser@example.com")))
+
+
+        val response = invitationService.invite(InvitationRequest("admin"))
+
+
+        assertThat(transactions.didRollback()).isTrue()
+        assertThat(response.isSuccess).isFalse()
+        assertThat(response.errors[0].code).isEqualTo("illegal_access")
     }
 
     @Test

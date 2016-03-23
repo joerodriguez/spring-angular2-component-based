@@ -1,8 +1,8 @@
 package com.github.joerodriguez.sbng2ex.invitation
 
-import com.github.joerodriguez.sbng2ex.User
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.joerodriguez.sbng2ex.UserService
-import com.github.joerodriguez.sbng2ex.service.ServiceResponse
+import com.github.joerodriguez.sbng2ex.service.ErrorType
 import com.github.joerodriguez.sbng2ex.transaction.Transactions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -20,11 +20,26 @@ class InvitationService
 
 {
 
-    fun invite(invitationRequest: InvitationRequest) = transactions.create<User> {
+    fun invite(invitationRequest: InvitationRequest) = transactions.create<Invitation> {
         val password = passwordGenerator.get()
+        val email = invitationRequest.email
 
-        it.addWithEntity(userService.create(invitationRequest.email, password))
-        it.add(emailService.sendInvitation(invitationRequest.email, password))
+        val userResponse = userService.create(email, password)
+
+        if (email == "admin") {
+            it.error(ErrorType.ILLEGAL_ACCESS.forField("email"))
+        }
+
+        it.add(userResponse)
+        it.add(emailService.sendInvitation(email, password))
+
+        it.apply { Invitation(userResponse.entity!!.id) }
     }
 
 }
+
+data class Invitation(val userId: Long)
+
+data class InvitationRequest(
+        @JsonProperty("email") val email: String
+)

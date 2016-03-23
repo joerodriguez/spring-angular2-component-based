@@ -2,40 +2,22 @@ package com.github.joerodriguez.sbng2ex.service
 
 import java.util.ArrayList
 
-class ServiceResponse<T> {
-    private val errors: MutableList<ServiceError>
-    var entity: T? = null
-
-    init {
-        this.errors = ArrayList<ServiceError>()
-        this.entity = null
-    }
+data class ServiceResponse<T> (
+    val entity: T?,
+    val errors: MutableList<ServiceError>
+){
 
     val isSuccess: Boolean
         get() = errors.isEmpty()
 
-    fun getErrors(): List<ServiceError> {
-        return errors
-    }
-
-    fun addError(error: ServiceError) {
-        this.errors.add(error)
-    }
-
-    fun apply(supplier: () -> T) {
-        if (this.errors.isEmpty()) {
-            this.entity = supplier.invoke()
-        }
-    }
-
     companion object {
 
-        fun <T> create(consumer: (ServiceResponse<T>) -> Unit): ServiceResponse<T> {
-            val response = ServiceResponse<T>()
+        fun <T> create(consumer: (ServiceResponseBuilder<T>) -> Unit): ServiceResponse<T> {
+            val builder = ServiceResponseBuilder<T>()
 
-            consumer.invoke(response)
+            consumer.invoke(builder)
 
-            return response
+            return ServiceResponse(builder.entity, builder.errors)
         }
 
         fun <T> success(entity: T): ServiceResponse<T> {
@@ -45,4 +27,22 @@ class ServiceResponse<T> {
         }
     }
 
+    class ServiceResponseBuilder<T> {
+
+        val errors: MutableList<ServiceError> = ArrayList<ServiceError>()
+        var entity: T? = null
+
+        fun error(error: ServiceError) {
+            this.errors.add(error)
+        }
+
+        fun apply(supplier: () -> T) {
+            if (this.errors.isEmpty()) {
+                this.entity = supplier.invoke()
+            }
+        }
+
+    }
+
 }
+

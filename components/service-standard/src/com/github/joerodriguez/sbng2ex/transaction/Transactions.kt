@@ -3,13 +3,11 @@ package com.github.joerodriguez.sbng2ex.transaction
 import com.github.joerodriguez.sbng2ex.service.ErrorType
 import com.github.joerodriguez.sbng2ex.service.ServiceError
 import com.github.joerodriguez.sbng2ex.service.ServiceResponse
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.transaction.support.TransactionOperations
-
-import java.util.ArrayList
-
-import org.slf4j.LoggerFactory.getLogger
+import java.util.*
 
 @Component
 open class Transactions
@@ -18,52 +16,59 @@ open class Transactions
     constructor(private val transactionOperations: TransactionOperations)
 
 {
+
     private val logger = getLogger(this.javaClass)
 
-    fun <T> create(transactionConsumer: (ServiceTransaction<T>) -> Unit): ServiceResponse<T> {
+    fun <T> create(transactionConsumer: (ServiceTransactionResponseBuilder<T>) -> Unit): ServiceResponse<T> {
         return transactionOperations.execute { status ->
 
-            val response = ServiceResponse<T>()
-            val transaction = ServiceTransaction<T>()
+            val responseBuilder = ServiceResponse.ServiceResponseBuilder<T>()
+            val transaction = ServiceTransactionResponseBuilder<T>()
 
             try {
                 transactionConsumer.invoke(transaction)
+
+                transaction.responses
+                        .forEach{ responseBuilder.errors.addAll(it.errors) };
+
+                responseBuilder.errors.addAll(transaction.errors)
+
+                if (!responseBuilder.errors.isEmpty()) {
+                    status.setRollbackOnly()
+                }
+                else {
+                    responseBuilder.entity = transaction.entitySupplier?.invoke()
+                }
+
             } catch (e: Exception) {
                 status.setRollbackOnly()
+
                 logger.error("Exception occurred during transaction.", e)
 
                 val systemUnexpectedError = ServiceError.create(ErrorType.SYSTEM_UNEXPECTED, "unknown")
-                response.addError(systemUnexpectedError)
+                responseBuilder.error(systemUnexpectedError)
             }
 
-            transaction.responses
-                    .flatMap { it.getErrors() }
-                    .forEach{ response.addError(it) };
-
-            response.entity = transaction.entityResponse?.entity
-
-            if (!response.getErrors().isEmpty()) {
-                status.setRollbackOnly()
-            }
-
-            response
+            ServiceResponse(responseBuilder.entity, responseBuilder.errors)
         }
     }
 
-    class ServiceTransaction<T> {
+    class ServiceTransactionResponseBuilder <T> {
 
+        var entitySupplier: (() -> T)? = null
         val responses: MutableList<ServiceResponse<*>> = ArrayList()
-
-        var entityResponse: ServiceResponse<T>? = null
-            private set
+        val errors: MutableList<ServiceError> = ArrayList()
 
         fun add(response: ServiceResponse<*>) {
             this.responses.add(response)
         }
 
-        fun addWithEntity(response: ServiceResponse<T>) {
-            this.responses.add(response)
-            this.entityResponse = response
+        fun error(error: ServiceError) {
+            this.errors.add(error)
+        }
+
+        fun apply(supplier: () -> T) {
+            this.entitySupplier = supplier
         }
     }
 
