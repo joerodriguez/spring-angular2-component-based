@@ -10,12 +10,6 @@ buildscript {
     }
 }
 
-repositories {
-    maven {
-        url "https://repo.spring.io/snapshot"
-    }
-}
-
 apply plugin: "kotlin"
 apply from: "${getRootDir()}/java.gradle"
 
@@ -25,10 +19,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     compile "org.springframework:spring-jdbc:${springVersion}"
 
-    compile "org.springframework.composed:spring-composed:1.0.0.BUILD-SNAPSHOT"
-
     compile project(":components/service-standard")
 
     testCompile project(":components/db-testing-library")
-    testCompile project(":components/test-helpers")
 }

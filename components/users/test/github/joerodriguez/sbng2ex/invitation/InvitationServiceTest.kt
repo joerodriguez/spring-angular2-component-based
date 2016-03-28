@@ -9,20 +9,15 @@ import com.github.joerodriguez.sbng2ex.invitation.PasswordGenerator
 import com.github.joerodriguez.sbng2ex.service.ErrorType
 import com.github.joerodriguez.sbng2ex.service.ServiceError
 import com.github.joerodriguez.sbng2ex.service.ServiceResponse
-import com.github.joerodriguez.sbng2ex.testhelper.stub
-import com.github.joerodriguez.sbng2ex.testhelper.with
-import com.github.joerodriguez.sbng2ex.testhelper.withException
+import github.joerodriguez.sbng2ex.stub
+import github.joerodriguez.sbng2ex.with
+import github.joerodriguez.sbng2ex.withException
 import com.github.joerodriguez.sbng2ex.transaction.TransactionsFake
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.powermock.api.mockito.PowerMockito.mock
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
+import org.mockito.Mockito.mock
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(EmailService::class, UserService::class, PasswordGenerator::class)
 class InvitationServiceTest {
 
     val emailService = mock(EmailService::class.java);

@@ -1,8 +1,7 @@
-package com.github.joerodriguez.sbng2ex.testhelper
+package github.joerodriguez.sbng2ex
 
 import org.mockito.Mockito
 import org.mockito.stubbing.OngoingStubbing
-
 
 fun <T> stub(methodCall: T): OngoingStubbing<T> {
     return Mockito.`when`(methodCall)

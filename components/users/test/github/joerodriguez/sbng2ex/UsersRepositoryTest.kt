@@ -2,11 +2,8 @@ package github.joerodriguez.sbng2ex
 
 import com.github.joerodriguez.sbng2ex.TestDataSource
 import com.github.joerodriguez.sbng2ex.UsersRepository
-import com.github.joerodriguez.sbng2ex.testhelper.stub
-import com.github.joerodriguez.sbng2ex.testhelper.with
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.springframework.security.crypto.password.PasswordEncoder
 

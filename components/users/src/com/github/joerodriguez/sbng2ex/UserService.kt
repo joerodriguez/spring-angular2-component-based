@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
 @Component
-class UserService
+open class UserService
 
     @Autowired
     constructor(private val usersRepository: UsersRepository)
@@ -17,7 +17,7 @@ class UserService
 
     private val emailPattern = Pattern.compile("^(.+)@(.+)$")
 
-    fun create(email: String, password: String) = ServiceResponse.create<User> {
+    open fun create(email: String, password: String) = ServiceResponse.create<User> {
 
         if (!emailPattern.matcher(email).matches()) {
             it.error(ErrorType.INVALID_EMAIL.forField("email"))
