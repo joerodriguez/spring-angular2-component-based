@@ -22,10 +22,9 @@ class InvitationController
     @RequestMapping(value = "/api/user-invitations", method = arrayOf(RequestMethod.POST), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun createInvitation(
             @RequestBody invitationRequest: InvitationRequest
-    ): HttpEntity<Void> {
-        val response = invitationService.invite(invitationRequest)
+    ): HttpEntity<Invitation> {
 
-        return responders.post(response, { invitation -> "/api/users/" + invitation.userId })
+        return responders.post(invitationService.invite(invitationRequest))
     }
 
 }

@@ -24,6 +24,7 @@ dependencies {
 
     testCompile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     testCompile "org.springframework.boot:spring-boot-starter-test:1.3.3.RELEASE"
+    testCompile "com.mashape.unirest:unirest-java:1.4.7"
     testCompile "org.skyscreamer:jsonassert:1.3.0"
     testCompile project(":components/db-testing-library")
 }

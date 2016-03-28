@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.github.joerodriguez.sbng2ex.TestDataSource
 import com.github.joerodriguez.sbng2ex.UsersRepository
-import com.github.joerodriguez.sbng2ex.invitation.InvitationRequest
+import com.mashape.unirest.http.Unirest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.test.SpringApplicationConfiguration
-import org.springframework.boot.test.TestRestTemplate
 import org.springframework.boot.test.WebIntegrationTest
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
@@ -24,7 +23,6 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
-import java.net.URI
 import javax.sql.DataSource
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -35,28 +33,42 @@ class CreateInvitationRequestTest {
     @Value("\${local.server.port}")
     var port = 0;
 
-    val endpoint: (String) -> URI = { path -> URI("http://localhost:$port$path") }
-
-    val restTemplate = TestRestTemplate()
+    val endpoint: (String) -> String = { path -> "http://localhost:$port$path" }
 
     @Autowired
     lateinit var usersRepository: UsersRepository
 
     @Test
     fun testSuccess() {
-        val location = restTemplate.postForLocation(endpoint("/api/user-invitations"), InvitationRequest("john@aol.com"))
+        val response = Unirest
+                .post(endpoint("/api/user-invitations"))
+                .header("Content-Type", "application/json")
+                .body(""" { "email": "john@aol.com" } """)
+                .asString()
 
+
+        assertThat(response.status).isEqualTo(HttpStatus.CREATED.value())
 
         val (id) = usersRepository.findByEmail("john@aol.com")!!
-        assertThat(location).isEqualTo(endpoint("/api/users/$id"))
+
+        val expected = """
+            {
+                userId: $id
+            }
+        """
+        JSONAssert.assertEquals(expected, response.body, true);
     }
 
     @Test
     fun testInvalidEmail() {
-        val entity = restTemplate.postForEntity(endpoint("/api/user-invitations"), InvitationRequest("jackson_at_aol_com"), String::class.java)
+        val response = Unirest
+                .post(endpoint("/api/user-invitations"))
+                .header("Content-Type", "application/json")
+                .body(""" { "email": "invalid_email" } """)
+                .asString()
 
 
-        assertThat(entity.statusCode).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+        assertThat(response.status).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value())
 
         val expected = """
             {
@@ -69,7 +81,7 @@ class CreateInvitationRequestTest {
                 ]
             }
         """
-        JSONAssert.assertEquals(expected, entity.body, true);
+        JSONAssert.assertEquals(expected, response.body, true);
     }
 
     @Test
@@ -77,10 +89,14 @@ class CreateInvitationRequestTest {
         usersRepository.create("jackson@aol.com", "_")
 
 
-        val entity = restTemplate.postForEntity(endpoint("/api/user-invitations"), InvitationRequest("jackson@aol.com"), String::class.java)
+        val response = Unirest
+                .post(endpoint("/api/user-invitations"))
+                .header("Content-Type", "application/json")
+                .body(""" { "email": "jackson@aol.com" } """)
+                .asString()
 
 
-        assertThat(entity.statusCode).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+        assertThat(response.status).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value())
 
         val expected = """
             {
@@ -93,7 +109,7 @@ class CreateInvitationRequestTest {
                 ]
             }
         """
-        JSONAssert.assertEquals(expected, entity.body, true);
+        JSONAssert.assertEquals(expected, response.body, true);
     }
 
 }
