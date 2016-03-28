@@ -2,6 +2,8 @@ package com.github.joerodriguez.sbng2ex.login
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.composed.web.Delete
+import org.springframework.composed.web.rest.json.PostJson
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -20,7 +22,7 @@ class SessionsController {
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
 
-    @RequestMapping(method = arrayOf(RequestMethod.POST), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    @PostJson
     fun create(@RequestBody newSessionRequest: CreateSessionRequest): ResponseEntity<Void> {
 
         val token = UsernamePasswordAuthenticationToken(newSessionRequest.email, newSessionRequest.password)
@@ -37,7 +39,7 @@ class SessionsController {
 
     }
 
-    @RequestMapping(method = arrayOf(RequestMethod.DELETE))
+    @Delete
     fun delete(): ResponseEntity<Void> {
         SecurityContextHolder.getContext().authentication = null
         return ResponseEntity(HttpStatus.OK)
