@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 class TestDataSource(dbName: String) {
 
-    private val dataSource: PGPoolingDataSource
+    val dataSource: PGPoolingDataSource
 
     init {
         dataSource = createDataSource(dbName)
