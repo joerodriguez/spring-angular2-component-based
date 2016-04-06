@@ -5,13 +5,14 @@ import {SessionService} from "./session.service";
     selector: 'login',
 
     template: `
-        <h1>Login</h1>
+        <form id="login">
+            <h1>Login</h1>
 
-        <input #email id="email">
-        <input #password type="password" id="password">
-        <input type="submit" (click)="login(email.value, password.value)">
-
+            <input #email id="email">
+            <input #password type="password" id="password">
+            <input type="submit" (click)="login(email.value, password.value)">
         {{message}}
+        </form>
     `
 })
 
