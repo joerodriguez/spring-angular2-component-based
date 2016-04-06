@@ -1,6 +1,6 @@
 package com.github.joerodriguez.tasks;
 
-import com.github.joerodriguez.sbng2ex.UsersRepository;
+import com.github.joerodriguez.sbng2ex.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
